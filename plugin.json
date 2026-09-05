@@ -1,0 +1,72 @@
+{
+  "$schema": "https://branchkit.dev/schemas/manifest.json",
+  "id": "snippets",
+  "name": "Snippets",
+  "version": "0.1.0",
+  "min_api_version": "0.1.0",
+  "description": "Speak a snippet's name to type its expansion at the cursor. Add your own in Settings.",
+  "author": "BranchKit",
+  "publisher": "github:branchkit",
+  "privileges": ["input"],
+  "dev": {
+    "build": [
+      ["go", "build", "-ldflags=-s -w", "-o", "../snippets-plugin", "."]
+    ],
+    "build_dir": "src"
+  },
+  "run": "./snippets-plugin",
+  "action_prefix": "snippets",
+  "action_types": {
+    "type": {
+      "label": "Type snippet",
+      "fields": [
+        {
+          "key": "text",
+          "label": "Text",
+          "field_type": "string",
+          "required": true
+        }
+      ]
+    }
+  },
+  "provides": {
+    "collections": {
+      "snippets": {
+        "preset": "named_entities",
+        "fields": [
+          {
+            "key": "spoken",
+            "field_type": "string",
+            "label": "Spoken name",
+            "required": true
+          },
+          {
+            "key": "expansion",
+            "field_type": "string",
+            "label": "Typed text",
+            "required": true
+          }
+        ],
+        "feeds_matching": {
+          "type": "as_named_entities",
+          "key_field": "spoken",
+          "value_field": "expansion"
+        },
+        "description": "Speakable snippet names and the text each one types."
+      }
+    }
+  },
+  "collection_data": {
+    "voice_commands": "commands.json",
+    "snippets": [
+      { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯" },
+      { "spoken": "table flip", "expansion": "(╯°□°)╯︵ ┻━┻" },
+      { "spoken": "disapproval", "expansion": "ಠ_ಠ" },
+      { "spoken": "long dash", "expansion": "—" },
+      { "spoken": "check mark", "expansion": "✓" }
+    ]
+  },
+  "implements": {
+    "on_action": true
+  }
+}

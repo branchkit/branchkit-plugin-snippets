@@ -1,0 +1,7 @@
+[
+  {
+    "pattern": ["snippet", "<snippets>"],
+    "action": { "type": "snippets.type", "text": "{snippets}" },
+    "description": "Type a snippet by its spoken name"
+  }
+]
