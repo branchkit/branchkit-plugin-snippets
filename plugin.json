@@ -45,25 +45,32 @@
             "field_type": "string",
             "label": "Typed text",
             "required": true
+          },
+          {
+            "key": "category",
+            "field_type": "string",
+            "label": "Category"
           }
         ],
+        "writers": "anyone_who_declares",
+        "merge": "collect",
         "feeds_matching": {
           "type": "as_named_entities",
           "key_field": "spoken",
           "value_field": "expansion"
         },
-        "description": "Speakable snippet names and the text each one types."
+        "description": "Speakable snippet names and the text each one types. Open to contributions: any plugin that declares this collection may ship a pack of records."
       }
     }
   },
   "collection_data": {
     "voice_commands": "commands.json",
     "snippets": [
-      { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯" },
-      { "spoken": "table flip", "expansion": "(╯°□°)╯︵ ┻━┻" },
-      { "spoken": "disapproval", "expansion": "ಠ_ಠ" },
-      { "spoken": "long dash", "expansion": "—" },
-      { "spoken": "check mark", "expansion": "✓" }
+      { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯", "category": "fun" },
+      { "spoken": "table flip", "expansion": "(╯°□°)╯︵ ┻━┻", "category": "fun" },
+      { "spoken": "disapproval", "expansion": "ಠ_ಠ", "category": "fun" },
+      { "spoken": "long dash", "expansion": "—", "category": "typography" },
+      { "spoken": "check mark", "expansion": "✓", "category": "typography" }
     ]
   },
   "implements": {
