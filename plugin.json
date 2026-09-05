@@ -71,7 +71,7 @@
   "collection_data": {
     "voice_commands": "commands.json",
     "keybinds": {
-      "alt+shift+s": { "action": "snippets.type", "params": { "name": "shrug" } }
+      "alt+shift+s": { "action": "snippets.type", "name": "shrug" }
     },
     "snippets": [
       { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯", "category": "fun" },
