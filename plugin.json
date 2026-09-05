@@ -8,6 +8,7 @@
   "author": "BranchKit",
   "publisher": "github:branchkit",
   "privileges": ["input"],
+  "optional_privileges": ["clipboard"],
   "dev": {
     "build": [
       ["go", "build", "-ldflags=-s -w", "-o", "../snippets-plugin", "."]
@@ -70,7 +71,18 @@
       { "spoken": "table flip", "expansion": "(╯°□°)╯︵ ┻━┻", "category": "fun" },
       { "spoken": "disapproval", "expansion": "ಠ_ಠ", "category": "fun" },
       { "spoken": "long dash", "expansion": "—", "category": "typography" },
-      { "spoken": "check mark", "expansion": "✓", "category": "typography" }
+      { "spoken": "check mark", "expansion": "✓", "category": "typography" },
+      { "spoken": "today", "expansion": "{{date}}", "category": "dynamic" },
+      { "spoken": "time now", "expansion": "{{time}}", "category": "dynamic" }
+    ]
+  },
+  "consumes": {
+    "effects": [
+      {
+        "asserts": ["signal_clipboard_in_use"],
+        "user_visible_name": "Clipboard paste",
+        "user_visible_description": "Long and multi-line snippets are delivered by pasting; the clipboard is briefly used and, if permitted, restored."
+      }
     ]
   },
   "implements": {

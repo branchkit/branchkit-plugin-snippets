@@ -39,4 +39,22 @@ branchkit-cli plugin install . --build
 ```
 
 Default snippets: `shrug`, `table flip`, `disapproval`, `long dash`,
-`check mark`.
+`check mark`, `today`, `time now`.
+
+## Beyond the tutorial
+
+`main` has grown past the teaching version (tag `v0.2.0` is what the
+tutorial builds):
+
+- **Dynamic tokens** — `{{date}}` and `{{time}}` resolve when typed, in
+  the seeded snippets and in any snippet you write ("Standup {{date}}").
+- **Long and multi-line snippets paste** instead of typing keystroke by
+  keystroke — signatures, boilerplate, and prompt-library entries arrive
+  instantly and intact. The `signal_clipboard_in_use` effect announces
+  the clipboard dance; granting the **optional `clipboard` privilege**
+  lets the plugin restore what your clipboard held afterward (without it,
+  the paste still works and the clipboard keeps the expansion).
+- **Open collection** — `writers: anyone_who_declares` means any plugin
+  may ship a *pack*: a manifest plus `collection_data`, no code, records
+  landing here subject to your write grant. The `category` field keeps
+  large collections organized in Settings.

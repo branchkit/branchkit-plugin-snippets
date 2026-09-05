@@ -1,7 +1,9 @@
 package main
 
 import (
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/branchkit/plugin-sdk-go/harness"
 )
@@ -39,6 +41,30 @@ func TestMultiwordSpokenName(t *testing.T) {
 	}
 	if params.Text != "(╯°□°)╯︵ ┻━┻" {
 		t.Fatalf("multiword spoken names must resolve too, got %q", params.Text)
+	}
+}
+
+func TestTokensExpand(t *testing.T) {
+	at := time.Date(2026, 9, 5, 14, 30, 0, 0, time.Local)
+	got := expandTokens("Notes — {{date}} at {{time}}", at)
+	want := "Notes — 2026-09-05 at 14:30"
+	if got != want {
+		t.Fatalf("got %q, want %q", got, want)
+	}
+	if expandTokens("no tokens here", at) != "no tokens here" {
+		t.Fatal("token-free text must pass through untouched")
+	}
+}
+
+func TestPasteRouting(t *testing.T) {
+	if needsPaste("short") {
+		t.Fatal("short single-line text types directly")
+	}
+	if !needsPaste("line one\nline two") {
+		t.Fatal("multi-line text must take the paste path")
+	}
+	if !needsPaste(strings.Repeat("x", pasteThreshold+1)) {
+		t.Fatal("long text must take the paste path")
 	}
 }
 
