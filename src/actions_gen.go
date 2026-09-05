@@ -7,7 +7,8 @@ import "github.com/branchkit/plugin-sdk-go"
 
 // TypeParams is the params shape for action "snippets.type (Type snippet)".
 type TypeParams struct {
-	Text string `json:"text"`
+	Text *string `json:"text,omitempty"`
+	Name *string `json:"name,omitempty"`
 }
 
 // HandleType registers a typed handler for action "snippets.type (Type snippet)".

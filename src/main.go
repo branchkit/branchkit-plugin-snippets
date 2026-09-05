@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"strings"
 	"time"
 
@@ -22,11 +23,24 @@ var plugin *branchkit.Plugin
 func main() {
 	plugin = branchkit.NewPlugin()
 
-	// The matcher resolves the <snippets> capture through the collection's
-	// value_field, so the param already carries the expansion — the spoken
-	// key never reaches this handler.
+	// Two ways in, one source of truth. The voice capture arrives with
+	// `text` pre-resolved (the matcher read the collection's value_field);
+	// every other trigger — keybinds, HUD buttons, another plugin's
+	// dispatch — sends `name` and the CURRENT expansion is read from the
+	// collection here, so nothing ever carries a stale copy of a snippet.
 	HandleType(plugin, func(p TypeParams, _ *branchkit.OnActionRequest) (any, error) {
-		text := expandTokens(p.Text, time.Now())
+		text := ""
+		if p.Text != nil {
+			text = *p.Text
+		}
+		if p.Name != nil && *p.Name != "" {
+			resolved, err := lookupExpansion(*p.Name)
+			if err != nil {
+				return nil, err
+			}
+			text = resolved
+		}
+		text = expandTokens(text, time.Now())
 		if text == "" {
 			return nil, nil
 		}
@@ -37,6 +51,26 @@ func main() {
 	})
 
 	plugin.Run()
+}
+
+// lookupExpansion resolves a snippet by its spoken name — records are keyed
+// by it — reading the merged collection, so user edits in Settings and pack
+// contributions reach by-name triggers immediately.
+func lookupExpansion(name string) (string, error) {
+	rec, err := plugin.Get("snippets", name)
+	if err != nil {
+		return "", err
+	}
+	if rec == nil {
+		return "", nil
+	}
+	var payload struct {
+		Expansion string `json:"expansion"`
+	}
+	if err := json.Unmarshal(rec.Payload, &payload); err != nil {
+		return "", err
+	}
+	return payload.Expansion, nil
 }
 
 // expandTokens resolves the dynamic {{...}} tokens an expansion may carry —

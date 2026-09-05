@@ -24,8 +24,12 @@
         {
           "key": "text",
           "label": "Text",
-          "field_type": "string",
-          "required": true
+          "field_type": "string"
+        },
+        {
+          "key": "name",
+          "label": "Snippet name",
+          "field_type": "string"
         }
       ]
     }
@@ -67,7 +71,7 @@
   "collection_data": {
     "voice_commands": "commands.json",
     "keybinds": {
-      "alt+shift+s": { "action": "snippets.type", "text": "¯\\_(ツ)_/¯" }
+      "alt+shift+s": { "action": "snippets.type", "name": "shrug" }
     },
     "snippets": [
       { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯", "category": "fun" },
