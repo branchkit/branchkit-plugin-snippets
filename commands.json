@@ -1,7 +1,15 @@
 [
   {
-    "pattern": ["snippet", "<snippets>"],
-    "action": { "type": "snippets.type", "text": "{snippets}" },
+    "pattern": [
+      "snippet",
+      "<snippets>"
+    ],
+    "action": {
+      "type": "snippets.type",
+      "params": {
+        "text": "{snippets}"
+      }
+    },
     "description": "Type a snippet by its spoken name"
   }
 ]
