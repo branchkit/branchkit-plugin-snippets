@@ -10,6 +10,7 @@
         "text": "{snippets}"
       }
     },
-    "description": "Type a snippet by its spoken name"
+    "discovery": "select",
+    "description": "Say \"snippet\", then the letter code next to the one you want"
   }
 ]

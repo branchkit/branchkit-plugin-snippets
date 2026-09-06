@@ -38,6 +38,7 @@
     "collections": {
       "snippets": {
         "preset": "named_entities",
+        "label": "Snippets",
         "fields": [
           {
             "key": "spoken",
