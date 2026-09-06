@@ -56,6 +56,11 @@
             "key": "category",
             "field_type": "string",
             "label": "Category"
+          },
+          {
+            "key": "speakable",
+            "field_type": "boolean",
+            "label": "Speakable"
           }
         ],
         "writers": "anyone_who_declares",
@@ -65,7 +70,8 @@
           "key_field": "spoken",
           "value_field": "expansion"
         },
-        "description": "Speakable snippet names and the text each one types. Open to contributions: any plugin that declares this collection may ship a pack of records."
+        "grammar_only_when": "speakable",
+        "description": "Snippet names and the text each one types. Every snippet is selectable by codeword (\"snippet\", then the letter code); a snippet marked speakable ALSO answers to its name (\"snippet shrug\"). Only speakable names enter the recognition grammar — imported packs stay out of the vocabulary until promoted. Open to contributions: any plugin that declares this collection may ship a pack of records."
       }
     }
   },
@@ -75,13 +81,13 @@
       "alt+shift+s": { "action": "snippets.type", "params": { "name": "shrug" } }
     },
     "snippets": [
-      { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯", "category": "fun" },
-      { "spoken": "table flip", "expansion": "(╯°□°)╯︵ ┻━┻", "category": "fun" },
-      { "spoken": "disapproval", "expansion": "ಠ_ಠ", "category": "fun" },
-      { "spoken": "long dash", "expansion": "—", "category": "typography" },
-      { "spoken": "check mark", "expansion": "✓", "category": "typography" },
-      { "spoken": "today", "expansion": "{{date}}", "category": "dynamic" },
-      { "spoken": "time now", "expansion": "{{time}}", "category": "dynamic" }
+      { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯", "category": "fun", "speakable": true },
+      { "spoken": "table flip", "expansion": "(╯°□°)╯︵ ┻━┻", "category": "fun", "speakable": true },
+      { "spoken": "disapproval", "expansion": "ಠ_ಠ", "category": "fun", "speakable": true },
+      { "spoken": "long dash", "expansion": "—", "category": "typography", "speakable": true },
+      { "spoken": "check mark", "expansion": "✓", "category": "typography", "speakable": true },
+      { "spoken": "today", "expansion": "{{date}}", "category": "dynamic", "speakable": true },
+      { "spoken": "time now", "expansion": "{{time}}", "category": "dynamic", "speakable": true }
     ]
   },
   "consumes": {
