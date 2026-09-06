@@ -55,7 +55,8 @@
           {
             "key": "category",
             "field_type": "string",
-            "label": "Category"
+            "label": "Category",
+            "display": "group"
           },
           {
             "key": "speakable",
@@ -100,6 +101,8 @@
     ]
   },
   "implements": {
-    "on_action": true
+    "on_action": true,
+    "settings_tabs": [{ "label": "Import", "key": "import" }],
+    "render_settings": true
   }
 }

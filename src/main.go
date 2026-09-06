@@ -50,6 +50,16 @@ func main() {
 		return nil, plugin.InputTypeText(text)
 	})
 
+	// The Import settings tab (docs/design/DESIGN_SELECTION_PRIMITIVE.md, step
+	// 3c): paste a pack, name it, done. Its snippets arrive as selection
+	// targets, not vocabulary.
+	branchkit.HandleTyped(plugin, "render_settings",
+		func(_ *branchkit.RenderSettingsRequest) (any, error) {
+			return branchkit.RenderSettingsResponse{HTML: renderImportSettings()}, nil
+		})
+	branchkit.HandleTyped(plugin, "import_pack", handleImportPack)
+	branchkit.HandleTyped(plugin, "remove_pack", handleRemovePack)
+
 	plugin.Run()
 }
 
