@@ -6,7 +6,7 @@
     max-width: 720px;
 
     & h2 {
-        font-size: var(--text-base);
+        font-size: var(--font-size-0);
         margin: 0 0 var(--size--4);
     }
     /* The second heading sits below the import form, so it needs room above it
@@ -16,10 +16,10 @@
     /* What the three accepted formats are, and what importing does NOT do —
        the paragraph people read once before pasting. */
     & .snip-lede {
-        font-size: var(--text-xs);
+        font-size: var(--font-size--2);
         color: var(--text-secondary);
         margin: 0 0 var(--size--2);
-        line-height: var(--leading);
+        line-height: var(--font-line-height--3);
     }
 
     /* The pack name and the pasted pack. Same box, different content: one is a
@@ -31,41 +31,41 @@
         width: 100%;
         box-sizing: border-box;
         padding: var(--size--4) var(--size--4);
-        border-radius: var(--radius);
-        border: var(--border-hairline) solid var(--border);
-        background: var(--bg-input);
+        border-radius: var(--border-radius-1);
+        border: var(--border-width-0) solid var(--neutral-variant-3);
+        background: var(--neutral-3);
         color: var(--text);
     }
     & input[type="text"].snip-name-input {
         margin-bottom: var(--size--4);
-        font-size: var(--text-sm);
+        font-size: var(--font-size--1);
     }
     & textarea.snip-text-input {
-        font-family: var(--font-code);
-        font-size: var(--text-xs);
+        font-family: var(--font-mono);
+        font-size: var(--font-size--2);
     }
 
     & .snip-actions { margin-top: var(--size--4); }
     & .snip-import-btn {
         padding: var(--size--4) var(--size--2);
-        border-radius: var(--radius);
+        border-radius: var(--border-radius-1);
         cursor: pointer;
-        border: var(--border-hairline) solid var(--border);
-        background: var(--accent);
-        color: var(--accent-on);
-        font-size: var(--text-sm);
+        border: var(--border-width-0) solid var(--neutral-variant-3);
+        background: var(--brand-accent-0);
+        color: var(--brand-accent-0-on);
+        font-size: var(--font-size--1);
     }
 
     /* What the last import actually did — how many landed, what was skipped. */
     & .snip-result {
         margin-top: var(--size--4);
-        font-size: var(--text-xs);
+        font-size: var(--font-size--2);
         color: var(--text-secondary);
-        line-height: var(--leading);
+        line-height: var(--font-line-height--3);
     }
 
     & .snip-empty {
-        font-size: var(--text-xs);
+        font-size: var(--font-size--2);
         color: var(--text-secondary);
     }
 
@@ -75,21 +75,21 @@
         align-items: center;
         gap: var(--size--4);
         padding: var(--size--4) 0;
-        border-bottom: var(--border-hairline) solid var(--scrim-3);
-        font-size: var(--text-sm);
+        border-bottom: var(--border-width-0) solid var(--scrim-3);
+        font-size: var(--font-size--1);
     }
     & .snip-pack-count { color: var(--text-secondary); }
     /* Shipped with the plugin, so there is nothing to remove. */
     & .snip-builtin {
-        font-size: var(--text-xs);
+        font-size: var(--font-size--2);
         color: var(--text-secondary);
     }
     & .snip-remove-btn {
-        font-size: var(--text-xs);
+        font-size: var(--font-size--2);
         padding: var(--size--7) var(--size--4);
-        border-radius: var(--radius-sm);
+        border-radius: var(--border-radius-0);
         cursor: pointer;
-        border: var(--border-hairline) solid var(--border);
+        border: var(--border-width-0) solid var(--neutral-variant-3);
         background: transparent;
         color: var(--text-secondary);
     }
