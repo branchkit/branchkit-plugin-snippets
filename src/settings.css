@@ -41,7 +41,7 @@
         font-size: var(--text-sm);
     }
     & textarea.snip-text-input {
-        font-family: monospace;
+        font-family: var(--font-code);
         font-size: var(--text-xs);
     }
 
