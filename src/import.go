@@ -396,44 +396,35 @@ func renderImportSettings() string {
 	importMu.Unlock()
 
 	var b strings.Builder
-	b.WriteString(`<div style="max-width: 720px;" data-signals:packname="''" data-signals:packtext="''">`)
-	b.WriteString(`<h2 style="font-size: 16px; margin: 0 0 6px;">Import a pack</h2>`)
-	b.WriteString(`<p style="font-size: 12px; color: var(--text-secondary, #888); margin: 0 0 12px; line-height: 1.5;">` +
+	b.WriteString(`<div class="snip-import" data-signals:packname="''" data-signals:packtext="''">`)
+	b.WriteString(`<h2>Import a pack</h2>`)
+	b.WriteString(`<p class="snip-lede">` +
 		`Paste an espanso match file, CSV (name,expansion), or a JSON array. ` +
 		`Imported snippets are picked by letter code from the &ldquo;snippet&rdquo; browse &mdash; ` +
 		`their names stay out of the recognition vocabulary until you mark one Speakable in ` +
 		`Collections &rsaquo; snippets. Re-importing under the same pack name replaces the pack.</p>`)
-	b.WriteString(`<input type="text" placeholder="Pack name (becomes the category)" data-bind:packname ` +
-		`style="width: 100%; box-sizing: border-box; padding: 8px 10px; margin-bottom: 8px; border-radius: 6px; ` +
-		`border: 1px solid var(--border, #333); background: var(--bg-input); color: var(--text); font-size: 13px;">`)
-	b.WriteString(`<textarea rows="10" placeholder="Paste the pack here&hellip;" data-bind:packtext ` +
-		`style="width: 100%; box-sizing: border-box; padding: 8px 10px; border-radius: 6px; font-family: monospace; ` +
-		`border: 1px solid var(--border, #333); background: var(--bg-input); color: var(--text); font-size: 12px;"></textarea>`)
-	b.WriteString(`<div style="margin-top: 8px;"><button style="padding: 6px 14px; border-radius: 6px; cursor: pointer; ` +
-		`border: 1px solid var(--border, #333); background: var(--accent); color: #fff; font-size: 13px;" ` +
-		`data-on:click="` + html.EscapeString(branchkit.MethodPost("import_pack", "{name: $packname, text: $packtext}")) + `">Import</button></div>`)
+	b.WriteString(`<input type="text" class="snip-name-input" placeholder="Pack name (becomes the category)" data-bind:packname>`)
+	b.WriteString(`<textarea rows="10" class="snip-text-input" placeholder="Paste the pack here&hellip;" data-bind:packtext></textarea>`)
+	b.WriteString(`<div class="snip-actions"><button class="snip-import-btn" data-on:click="` + html.EscapeString(branchkit.MethodPost("import_pack", "{name: $packname, text: $packtext}")) + `">Import</button></div>`)
 	if result != "" {
-		b.WriteString(`<div style="margin-top: 10px; font-size: 12px; color: var(--text-secondary, #aaa); line-height: 1.5;">` +
+		b.WriteString(`<div class="snip-result">` +
 			html.EscapeString(result) + `</div>`)
 	}
 
-	b.WriteString(`<h2 style="font-size: 16px; margin: 24px 0 6px;">Packs</h2>`)
+	b.WriteString(`<h2 class="snip-packs-heading">Packs</h2>`)
 	if len(packs) == 0 {
-		b.WriteString(`<p style="font-size: 12px; color: var(--text-secondary, #888);">No categorized snippets yet.</p>`)
+		b.WriteString(`<p class="snip-empty">No categorized snippets yet.</p>`)
 	}
 	for _, p := range packs {
 		nameJSON, _ := json.Marshal(p.Name)
-		b.WriteString(`<div style="display: flex; align-items: center; gap: 10px; padding: 6px 0; ` +
-			`border-bottom: 1px solid var(--scrim-3); font-size: 13px;">`)
-		b.WriteString(`<span style="flex: 1;">` + html.EscapeString(p.Name) + `</span>`)
-		b.WriteString(fmt.Sprintf(`<span style="color: var(--text-secondary, #888);">%d snippet(s)</span>`, p.Count))
+		b.WriteString(`<div class="snip-pack">`)
+		b.WriteString(`<span class="grow">` + html.EscapeString(p.Name) + `</span>`)
+		b.WriteString(fmt.Sprintf(`<span class="snip-pack-count">%d snippet(s)</span>`, p.Count))
 		if p.Builtin {
-			b.WriteString(`<span style="font-size: 11px; color: var(--text-secondary, #666);" ` +
+			b.WriteString(`<span class="snip-builtin" ` +
 				`title="Shipped with the plugin — its snippets reload at startup, so removing the pack here would not stick.">built-in</span>`)
 		} else {
-			b.WriteString(`<button style="font-size: 11px; padding: 2px 10px; border-radius: 4px; cursor: pointer; ` +
-				`border: 1px solid var(--border, #333); background: transparent; color: var(--text-secondary, #aaa);" ` +
-				`data-on:click="` + html.EscapeString("if (confirm('Remove pack "+html.EscapeString(p.Name)+" and its snippets?')) "+
+			b.WriteString(`<button class="snip-remove-btn" data-on:click="` + html.EscapeString("if (confirm('Remove pack "+html.EscapeString(p.Name)+" and its snippets?')) "+
 				branchkit.MethodPost("remove_pack", "{name: "+string(nameJSON)+"}")) + `">Remove</button>`)
 		}
 		b.WriteString(`</div>`)

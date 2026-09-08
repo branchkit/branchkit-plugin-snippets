@@ -1,12 +1,16 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
 	"strings"
 	"time"
 
 	"github.com/branchkit/plugin-sdk-go"
 )
+
+//go:embed settings.css
+var snippetsCSS string
 
 // Expansions longer than this, or containing newlines, go through the
 // clipboard-paste path: keystroke-typing a long expansion is slow and
@@ -55,7 +59,7 @@ func main() {
 	// targets, not vocabulary.
 	branchkit.HandleTyped(plugin, "render_settings",
 		func(_ *branchkit.RenderSettingsRequest) (any, error) {
-			return branchkit.RenderSettingsResponse{HTML: renderImportSettings()}, nil
+			return branchkit.RenderSettingsResponse{HTML: renderImportSettings(), CSS: &snippetsCSS}, nil
 		})
 	branchkit.HandleTyped(plugin, "import_pack", handleImportPack)
 	branchkit.HandleTyped(plugin, "remove_pack", handleRemovePack)

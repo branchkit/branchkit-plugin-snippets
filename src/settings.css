@@ -1,0 +1,99 @@
+/* The snippets plugin's Import tab. Shipped through
+   RenderSettingsResponse.CSS, so it lands in the frame's <style id="plugin-css">
+   rather than being rebuilt into the markup on every render. */
+
+.snip-import {
+    max-width: 720px;
+
+    & h2 {
+        font-size: 16px;
+        margin: 0 0 6px;
+    }
+    /* The second heading sits below the import form, so it needs room above it
+       that the first one does not. */
+    & h2.snip-packs-heading { margin-top: 24px; }
+
+    /* What the three accepted formats are, and what importing does NOT do —
+       the paragraph people read once before pasting. */
+    & .snip-lede {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin: 0 0 12px;
+        line-height: 1.5;
+    }
+
+    /* The pack name and the pasted pack. Same box, different content: one is a
+       word, the other is a file. `input[type="text"]` is qualified because the
+       shared sheet styles that selector at (0,1,1) and a bare class would
+       lose to it. */
+    & input[type="text"].snip-name-input,
+    & textarea.snip-text-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--bg-input);
+        color: var(--text);
+    }
+    & input[type="text"].snip-name-input {
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+    & textarea.snip-text-input {
+        font-family: monospace;
+        font-size: 12px;
+    }
+
+    & .snip-actions { margin-top: 8px; }
+    & .snip-import-btn {
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        background: var(--accent);
+        /* Literal: the contrast partner for --accent, and --text inverts under
+           a light theme. --accent-on is the honest pairing and adopting it
+           changes the colour, so it belongs to the retint pass. */
+        color: #fff;
+        font-size: 13px;
+    }
+
+    /* What the last import actually did — how many landed, what was skipped. */
+    & .snip-result {
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+    }
+
+    & .snip-empty {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+
+    /* One installed pack. */
+    & .snip-pack {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--scrim-3);
+        font-size: 13px;
+    }
+    & .snip-pack-count { color: var(--text-secondary); }
+    /* Shipped with the plugin, so there is nothing to remove. */
+    & .snip-builtin {
+        font-size: 11px;
+        color: var(--text-secondary);
+    }
+    & .snip-remove-btn {
+        font-size: 11px;
+        padding: 2px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-secondary);
+    }
+}
