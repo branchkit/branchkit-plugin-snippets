@@ -405,12 +405,12 @@ func renderImportSettings() string {
 		`Collections &rsaquo; snippets. Re-importing under the same pack name replaces the pack.</p>`)
 	b.WriteString(`<input type="text" placeholder="Pack name (becomes the category)" data-bind:packname ` +
 		`style="width: 100%; box-sizing: border-box; padding: 8px 10px; margin-bottom: 8px; border-radius: 6px; ` +
-		`border: 1px solid var(--border, #333); background: var(--bg-input, #0a0a0a); color: var(--text, #e0e0e0); font-size: 13px;">`)
+		`border: 1px solid var(--border, #333); background: var(--bg-input); color: var(--text); font-size: 13px;">`)
 	b.WriteString(`<textarea rows="10" placeholder="Paste the pack here&hellip;" data-bind:packtext ` +
 		`style="width: 100%; box-sizing: border-box; padding: 8px 10px; border-radius: 6px; font-family: monospace; ` +
-		`border: 1px solid var(--border, #333); background: var(--bg-input, #0a0a0a); color: var(--text, #e0e0e0); font-size: 12px;"></textarea>`)
+		`border: 1px solid var(--border, #333); background: var(--bg-input); color: var(--text); font-size: 12px;"></textarea>`)
 	b.WriteString(`<div style="margin-top: 8px;"><button style="padding: 6px 14px; border-radius: 6px; cursor: pointer; ` +
-		`border: 1px solid var(--border, #333); background: var(--accent, #4a9eff); color: #fff; font-size: 13px;" ` +
+		`border: 1px solid var(--border, #333); background: var(--accent); color: #fff; font-size: 13px;" ` +
 		`data-on:click="` + html.EscapeString(branchkit.MethodPost("import_pack", "{name: $packname, text: $packtext}")) + `">Import</button></div>`)
 	if result != "" {
 		b.WriteString(`<div style="margin-top: 10px; font-size: 12px; color: var(--text-secondary, #aaa); line-height: 1.5;">` +
@@ -424,7 +424,7 @@ func renderImportSettings() string {
 	for _, p := range packs {
 		nameJSON, _ := json.Marshal(p.Name)
 		b.WriteString(`<div style="display: flex; align-items: center; gap: 10px; padding: 6px 0; ` +
-			`border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px;">`)
+			`border-bottom: 1px solid var(--scrim-3); font-size: 13px;">`)
 		b.WriteString(`<span style="flex: 1;">` + html.EscapeString(p.Name) + `</span>`)
 		b.WriteString(fmt.Sprintf(`<span style="color: var(--text-secondary, #888);">%d snippet(s)</span>`, p.Count))
 		if p.Builtin {
