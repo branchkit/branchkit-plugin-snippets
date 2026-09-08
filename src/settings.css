@@ -31,7 +31,7 @@
         width: 100%;
         box-sizing: border-box;
         padding: 8px 10px;
-        border-radius: 6px;
+        border-radius: var(--radius);
         border: 1px solid var(--border);
         background: var(--bg-input);
         color: var(--text);
@@ -48,7 +48,7 @@
     & .snip-actions { margin-top: 8px; }
     & .snip-import-btn {
         padding: 6px 14px;
-        border-radius: 6px;
+        border-radius: var(--radius);
         cursor: pointer;
         border: 1px solid var(--border);
         background: var(--accent);
@@ -87,7 +87,7 @@
     & .snip-remove-btn {
         font-size: 11px;
         padding: 2px 10px;
-        border-radius: 4px;
+        border-radius: var(--radius-sm);
         cursor: pointer;
         border: 1px solid var(--border);
         background: transparent;
