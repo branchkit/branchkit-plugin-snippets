@@ -32,7 +32,7 @@
         box-sizing: border-box;
         padding: var(--space-2) var(--space-2);
         border-radius: var(--radius);
-        border: 1px solid var(--border);
+        border: var(--border-hairline) solid var(--border);
         background: var(--bg-input);
         color: var(--text);
     }
@@ -50,7 +50,7 @@
         padding: var(--space-2) var(--space-3);
         border-radius: var(--radius);
         cursor: pointer;
-        border: 1px solid var(--border);
+        border: var(--border-hairline) solid var(--border);
         background: var(--accent);
         color: var(--accent-on);
         font-size: var(--text-sm);
@@ -75,7 +75,7 @@
         align-items: center;
         gap: var(--space-2);
         padding: var(--space-2) 0;
-        border-bottom: 1px solid var(--scrim-3);
+        border-bottom: var(--border-hairline) solid var(--scrim-3);
         font-size: var(--text-sm);
     }
     & .snip-pack-count { color: var(--text-secondary); }
@@ -89,7 +89,7 @@
         padding: var(--space-0) var(--space-2);
         border-radius: var(--radius-sm);
         cursor: pointer;
-        border: 1px solid var(--border);
+        border: var(--border-hairline) solid var(--border);
         background: transparent;
         color: var(--text-secondary);
     }
