@@ -7,18 +7,18 @@
 
     & h2 {
         font-size: var(--text-base);
-        margin: 0 0 6px;
+        margin: 0 0 var(--space-2);
     }
     /* The second heading sits below the import form, so it needs room above it
        that the first one does not. */
-    & h2.snip-packs-heading { margin-top: 24px; }
+    & h2.snip-packs-heading { margin-top: var(--space-5); }
 
     /* What the three accepted formats are, and what importing does NOT do —
        the paragraph people read once before pasting. */
     & .snip-lede {
         font-size: var(--text-xs);
         color: var(--text-secondary);
-        margin: 0 0 12px;
+        margin: 0 0 var(--space-3);
         line-height: 1.5;
     }
 
@@ -37,7 +37,7 @@
         color: var(--text);
     }
     & input[type="text"].snip-name-input {
-        margin-bottom: 8px;
+        margin-bottom: var(--space-2);
         font-size: var(--text-sm);
     }
     & textarea.snip-text-input {
@@ -45,7 +45,7 @@
         font-size: var(--text-xs);
     }
 
-    & .snip-actions { margin-top: 8px; }
+    & .snip-actions { margin-top: var(--space-2); }
     & .snip-import-btn {
         padding: var(--space-2) var(--space-3);
         border-radius: var(--radius);
@@ -58,7 +58,7 @@
 
     /* What the last import actually did — how many landed, what was skipped. */
     & .snip-result {
-        margin-top: 10px;
+        margin-top: var(--space-2);
         font-size: var(--text-xs);
         color: var(--text-secondary);
         line-height: 1.5;
@@ -73,7 +73,7 @@
     & .snip-pack {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: var(--space-2);
         padding: var(--space-2) 0;
         border-bottom: 1px solid var(--scrim-3);
         font-size: var(--text-sm);
