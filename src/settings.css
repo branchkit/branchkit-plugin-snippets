@@ -19,7 +19,7 @@
         font-size: var(--text-xs);
         color: var(--text-secondary);
         margin: 0 0 var(--space-3);
-        line-height: 1.5;
+        line-height: var(--leading);
     }
 
     /* The pack name and the pasted pack. Same box, different content: one is a
@@ -61,7 +61,7 @@
         margin-top: var(--space-2);
         font-size: var(--text-xs);
         color: var(--text-secondary);
-        line-height: 1.5;
+        line-height: var(--leading);
     }
 
     & .snip-empty {
