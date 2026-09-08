@@ -52,10 +52,7 @@
         cursor: pointer;
         border: 1px solid var(--border);
         background: var(--accent);
-        /* Literal: the contrast partner for --accent, and --text inverts under
-           a light theme. --accent-on is the honest pairing and adopting it
-           changes the colour, so it belongs to the retint pass. */
-        color: #fff;
+        color: var(--accent-on);
         font-size: 13px;
     }
 
