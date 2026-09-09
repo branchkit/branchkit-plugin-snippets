@@ -7,11 +7,11 @@
 
     & h2 {
         font-size: var(--font-size-0);
-        margin: 0 0 var(--size--4);
+        margin: 0 0 var(--size--2);
     }
     /* The second heading sits below the import form, so it needs room above it
        that the first one does not. */
-    & h2.snip-packs-heading { margin-top: var(--size-1); }
+    & h2.snip-packs-heading { margin-top: var(--size-3); }
 
     /* What the three accepted formats are, and what importing does NOT do —
        the paragraph people read once before pasting. */
@@ -30,7 +30,7 @@
     & textarea.snip-text-input {
         width: 100%;
         box-sizing: border-box;
-        padding: var(--size--4) var(--size--4);
+        padding: var(--size--2) var(--size--2);
         border-radius: var(--border-radius-1);
         border: var(--border-width-0) solid var(--neutral-variant-3);
         background: var(--neutral-3);
@@ -39,7 +39,7 @@
         color: var(--_ink);
     }
     & input[type="text"].snip-name-input {
-        margin-bottom: var(--size--4);
+        margin-bottom: var(--size--2);
         font-size: var(--font-size--1);
     }
     & textarea.snip-text-input {
@@ -47,9 +47,9 @@
         font-size: var(--font-size--2);
     }
 
-    & .snip-actions { margin-top: var(--size--4); }
+    & .snip-actions { margin-top: var(--size--2); }
     & .snip-import-btn {
-        padding: var(--size--4) var(--size--2);
+        padding: var(--size--2) var(--size--2);
         border-radius: var(--border-radius-1);
         cursor: pointer;
         border: var(--border-width-0) solid var(--neutral-variant-3);
@@ -60,7 +60,7 @@
 
     /* What the last import actually did — how many landed, what was skipped. */
     & .snip-result {
-        margin-top: var(--size--4);
+        margin-top: var(--size--2);
         font-size: var(--font-size--2);
         color: var(--_ink-dim);
         line-height: var(--font-line-height--3);
@@ -75,8 +75,8 @@
     & .snip-pack {
         display: flex;
         align-items: center;
-        gap: var(--size--4);
-        padding: var(--size--4) 0;
+        gap: var(--size--2);
+        padding: var(--size--2) 0;
         border-bottom: var(--border-width-0) solid var(--neutral-variant-2);
         font-size: var(--font-size--1);
     }
@@ -88,7 +88,7 @@
     }
     & .snip-remove-btn {
         font-size: var(--font-size--2);
-        padding: var(--size--7) var(--size--4);
+        padding: var(--size--2) var(--size--2);
         border-radius: var(--border-radius-0);
         cursor: pointer;
         border: var(--border-width-0) solid var(--neutral-variant-3);
