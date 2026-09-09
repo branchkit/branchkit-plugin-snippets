@@ -17,7 +17,7 @@
        the paragraph people read once before pasting. */
     & .snip-lede {
         font-size: var(--font-size--2);
-        color: var(--text-secondary);
+        color: var(--_ink-dim);
         margin: 0 0 var(--size--2);
         line-height: var(--font-line-height--3);
     }
@@ -34,7 +34,9 @@
         border-radius: var(--border-radius-1);
         border: var(--border-width-0) solid var(--neutral-variant-3);
         background: var(--neutral-3);
-        color: var(--text);
+        --_ink: var(--neutral-3-on);
+        --_ink-dim: var(--neutral-3-dim);
+        color: var(--_ink);
     }
     & input[type="text"].snip-name-input {
         margin-bottom: var(--size--4);
@@ -60,13 +62,13 @@
     & .snip-result {
         margin-top: var(--size--4);
         font-size: var(--font-size--2);
-        color: var(--text-secondary);
+        color: var(--_ink-dim);
         line-height: var(--font-line-height--3);
     }
 
     & .snip-empty {
         font-size: var(--font-size--2);
-        color: var(--text-secondary);
+        color: var(--_ink-dim);
     }
 
     /* One installed pack. */
@@ -78,11 +80,11 @@
         border-bottom: var(--border-width-0) solid var(--scrim-3);
         font-size: var(--font-size--1);
     }
-    & .snip-pack-count { color: var(--text-secondary); }
+    & .snip-pack-count { color: var(--_ink-dim); }
     /* Shipped with the plugin, so there is nothing to remove. */
     & .snip-builtin {
         font-size: var(--font-size--2);
-        color: var(--text-secondary);
+        color: var(--_ink-dim);
     }
     & .snip-remove-btn {
         font-size: var(--font-size--2);
@@ -91,6 +93,6 @@
         cursor: pointer;
         border: var(--border-width-0) solid var(--neutral-variant-3);
         background: transparent;
-        color: var(--text-secondary);
+        color: var(--_ink-dim);
     }
 }
