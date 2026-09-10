@@ -2,6 +2,7 @@
   "$schema": "https://branchkit.dev/schemas/manifest.json",
   "id": "snippets",
   "name": "Snippets",
+  "icon": "text",
   "version": "0.1.0",
   "min_api_version": "0.1.0",
   "description": "Speak a snippet's name to type its expansion at the cursor. Add your own in Settings.",
