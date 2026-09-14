@@ -38,6 +38,7 @@
   "provides": {
     "collections": {
       "snippets": {
+        "id_strategy": { "type": "by_field", "field": "spoken" },
         "preset": "named_entities",
         "label": "Snippets",
         "fields": [
