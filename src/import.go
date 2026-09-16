@@ -33,6 +33,8 @@ import (
 	"sync"
 
 	"github.com/branchkit/plugin-sdk-go"
+	"github.com/branchkit/plugin-sdk-go/ui"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -416,17 +418,22 @@ func renderImportSettings() string {
 		b.WriteString(`<p class="snip-empty">No categorized snippets yet.</p>`)
 	}
 	for _, p := range packs {
-		nameJSON, _ := json.Marshal(p.Name)
 		b.WriteString(`<div class="snip-pack">`)
+
 		b.WriteString(`<span class="grow">` + html.EscapeString(p.Name) + `</span>`)
 		b.WriteString(fmt.Sprintf(`<span class="snip-pack-count">%d snippet(s)</span>`, p.Count))
 		if p.Builtin {
 			b.WriteString(`<span class="snip-builtin" ` +
 				`title="Shipped with the plugin — its snippets reload at startup, so removing the pack here would not stick.">built-in</span>`)
 		} else {
-			b.WriteString(`<button class="snip-remove-btn" data-on:click="` + html.EscapeString("if (confirm('Remove pack "+html.EscapeString(p.Name)+" and its snippets?')) "+
-				branchkit.MethodPost("remove_pack", "{name: "+string(nameJSON)+"}")) + `">Remove</button>`)
+			// A signal-based confirm: the settings iframe has no allow-modals,
+			// so window.confirm() returns false silently and a confirm-guarded
+			// post is a dead button.
+			b.WriteString(ui.ConfirmButton("Remove", "remove_pack",
+				ui.Payload("name", p.Name), ui.Class("snip-remove-btn"),
+				ui.ConfirmLabel("Remove pack and its snippets?")))
 		}
+
 		b.WriteString(`</div>`)
 	}
 	b.WriteString(`</div>`)
