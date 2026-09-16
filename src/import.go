@@ -228,10 +228,6 @@ type removePackRequest struct {
 	Name string `json:"name"`
 }
 
-type okResponse struct {
-	OK bool `json:"ok"`
-}
-
 func (h *Host) setResult(msg string) {
 	h.importMu.Lock()
 	h.lastImportResult = msg
@@ -242,15 +238,15 @@ func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 	pack := strings.TrimSpace(req.Name)
 	if pack == "" {
 		h.setResult("A pack needs a name — it becomes the category every imported snippet carries.")
-		return okResponse{OK: false}, nil
+		return nil, nil
 	}
 	if builtinCategories[pack] {
 		h.setResult(fmt.Sprintf("%q is a built-in category — pick another pack name.", pack))
-		return okResponse{OK: false}, nil
+		return nil, nil
 	}
 	if strings.TrimSpace(req.Text) == "" {
 		h.setResult("Nothing to import — paste a pack first.")
-		return okResponse{OK: false}, nil
+		return nil, nil
 	}
 
 	outcome := parsePack(req.Text)
@@ -260,7 +256,7 @@ func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 			reasons = " " + strings.Join(firstN(outcome.skipped, 3), "; ")
 		}
 		h.setResult(fmt.Sprintf("Detected %s, but nothing imported.%s", outcome.format, reasons))
-		return okResponse{OK: false}, nil
+		return nil, nil
 	}
 
 	// Replace-on-reimport: the pack's previous records go first, so a
@@ -323,13 +319,13 @@ func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 			strings.Join(firstN(outcome.skipped, 5), "; "))
 	}
 	h.setResult(msg)
-	return okResponse{OK: true}, nil
+	return nil, nil
 }
 
 func (h *Host) handleRemovePack(req *removePackRequest) (any, error) {
 	pack := strings.TrimSpace(req.Name)
 	if pack == "" || builtinCategories[pack] {
-		return okResponse{OK: false}, nil
+		return nil, nil
 	}
 	existing, err := h.plugin.ListAll("snippets")
 	if err != nil {
@@ -350,7 +346,7 @@ func (h *Host) handleRemovePack(req *removePackRequest) (any, error) {
 		}
 	}
 	h.setResult(fmt.Sprintf("Removed pack %q (%d snippet(s)).", pack, len(ids)))
-	return okResponse{OK: true}, nil
+	return nil, nil
 }
 
 func firstN(xs []string, n int) []string {
