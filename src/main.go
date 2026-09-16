@@ -59,7 +59,7 @@ func main() {
 	// targets, not vocabulary.
 	plugin.SettingsCSS(snippetsCSS)
 	plugin.SettingsTab("import", func(_ *branchkit.RenderSettingsRequest) (string, error) {
-		return renderImportSettings(), nil
+		return renderImportSettings()
 	})
 
 	branchkit.HandleTyped(plugin, "import_pack", handleImportPack)

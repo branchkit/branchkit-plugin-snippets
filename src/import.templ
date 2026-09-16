@@ -1,0 +1,54 @@
+package main
+
+import "github.com/branchkit/plugin-sdk-go"
+import "github.com/branchkit/plugin-sdk-go/ui"
+import "fmt"
+
+// packView is one installed pack: its category name, how many snippets it
+// holds, and whether the plugin ships it (a shipped pack reloads at startup,
+// so removing it here would not stick).
+type packView struct {
+	Name    string
+	Count   int
+	Builtin bool
+}
+
+templ ImportSettings(packs []packView, result string) {
+	<div class="snip-import" data-signals:packname="''" data-signals:packtext="''">
+		<h2>Import a pack</h2>
+		<p class="snip-lede">
+			Paste an espanso match file, CSV (name,expansion), or a JSON array.
+			Imported snippets are picked by letter code from the &ldquo;snippet&rdquo; browse &mdash;
+			their names stay out of the recognition vocabulary until you mark one Speakable in
+			Collections &rsaquo; snippets. Re-importing under the same pack name replaces the pack.
+		</p>
+		<input type="text" class="snip-name-input" placeholder="Pack name (becomes the category)" data-bind:packname/>
+		<textarea rows="10" class="snip-text-input" placeholder="Paste the pack here&hellip;" data-bind:packtext></textarea>
+		<div class="snip-actions">
+			<button class="snip-import-btn" data-on:click={ branchkit.MethodPost("import_pack", ui.Args("name", ui.Expr("$packname"), "text", ui.Expr("$packtext"))) }>Import</button>
+		</div>
+		if result != "" {
+			<div class="snip-result">{ result }</div>
+		}
+		<h2 class="snip-packs-heading">Packs</h2>
+		if len(packs) == 0 {
+			<p class="snip-empty">No categorized snippets yet.</p>
+		}
+		for _, p := range packs {
+			<div class="snip-pack">
+				<span class="grow">{ p.Name }</span>
+				<span class="snip-pack-count">{ fmt.Sprintf("%d snippet(s)", p.Count) }</span>
+				if p.Builtin {
+					<span class="snip-builtin" title="Shipped with the plugin — its snippets reload at startup, so removing the pack here would not stick.">built-in</span>
+				} else {
+					// A signal-based confirm: the settings iframe has no allow-modals,
+					// so window.confirm() returns false silently and a confirm-guarded
+					// post is a dead button.
+					@templ.Raw(ui.ConfirmButton("Remove", "remove_pack",
+						ui.Payload("name", p.Name), ui.Class("snip-remove-btn"),
+						ui.ConfirmLabel("Remove pack and its snippets?")))
+				}
+			</div>
+		}
+	</div>
+}

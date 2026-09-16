@@ -26,14 +26,12 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"html"
 	"regexp"
 	"sort"
 	"strings"
 	"sync"
 
 	"github.com/branchkit/plugin-sdk-go"
-	"github.com/branchkit/plugin-sdk-go/ui"
 
 	"gopkg.in/yaml.v3"
 )
@@ -370,12 +368,7 @@ func firstN(xs []string, n int) []string {
 
 // --- render ----------------------------------------------------------------
 
-func renderImportSettings() string {
-	type packView struct {
-		Name    string
-		Count   int
-		Builtin bool
-	}
+func renderImportSettings() (string, error) {
 	counts := map[string]int{}
 	if records, err := plugin.ListAll("snippets"); err == nil {
 		for _, rec := range records {
@@ -397,45 +390,5 @@ func renderImportSettings() string {
 	result := lastImportResult
 	importMu.Unlock()
 
-	var b strings.Builder
-	b.WriteString(`<div class="snip-import" data-signals:packname="''" data-signals:packtext="''">`)
-	b.WriteString(`<h2>Import a pack</h2>`)
-	b.WriteString(`<p class="snip-lede">` +
-		`Paste an espanso match file, CSV (name,expansion), or a JSON array. ` +
-		`Imported snippets are picked by letter code from the &ldquo;snippet&rdquo; browse &mdash; ` +
-		`their names stay out of the recognition vocabulary until you mark one Speakable in ` +
-		`Collections &rsaquo; snippets. Re-importing under the same pack name replaces the pack.</p>`)
-	b.WriteString(`<input type="text" class="snip-name-input" placeholder="Pack name (becomes the category)" data-bind:packname>`)
-	b.WriteString(`<textarea rows="10" class="snip-text-input" placeholder="Paste the pack here&hellip;" data-bind:packtext></textarea>`)
-	b.WriteString(`<div class="snip-actions"><button class="snip-import-btn" data-on:click="` + html.EscapeString(branchkit.MethodPost("import_pack", "{name: $packname, text: $packtext}")) + `">Import</button></div>`)
-	if result != "" {
-		b.WriteString(`<div class="snip-result">` +
-			html.EscapeString(result) + `</div>`)
-	}
-
-	b.WriteString(`<h2 class="snip-packs-heading">Packs</h2>`)
-	if len(packs) == 0 {
-		b.WriteString(`<p class="snip-empty">No categorized snippets yet.</p>`)
-	}
-	for _, p := range packs {
-		b.WriteString(`<div class="snip-pack">`)
-
-		b.WriteString(`<span class="grow">` + html.EscapeString(p.Name) + `</span>`)
-		b.WriteString(fmt.Sprintf(`<span class="snip-pack-count">%d snippet(s)</span>`, p.Count))
-		if p.Builtin {
-			b.WriteString(`<span class="snip-builtin" ` +
-				`title="Shipped with the plugin — its snippets reload at startup, so removing the pack here would not stick.">built-in</span>`)
-		} else {
-			// A signal-based confirm: the settings iframe has no allow-modals,
-			// so window.confirm() returns false silently and a confirm-guarded
-			// post is a dead button.
-			b.WriteString(ui.ConfirmButton("Remove", "remove_pack",
-				ui.Payload("name", p.Name), ui.Class("snip-remove-btn"),
-				ui.ConfirmLabel("Remove pack and its snippets?")))
-		}
-
-		b.WriteString(`</div>`)
-	}
-	b.WriteString(`</div>`)
-	return b.String()
+	return branchkit.RenderComponent(ImportSettings(packs, result))
 }

@@ -1,3 +1,5 @@
+github.com/a-h/templ v0.3.1001 h1:yHDTgexACdJttyiyamcTHXr2QkIeVF1MukLy44EAhMY=
+github.com/a-h/templ v0.3.1001/go.mod h1:oCZcnKRf5jjsGpf2yELzQfodLphd2mwecwG4Crk5HBo=
 github.com/branchkit/plugin-sdk-go v0.5.0 h1:xJWmiOjYKah1cUhL+BLopCHfYaz/pNB1WfzD2ZVzKIE=
 github.com/branchkit/plugin-sdk-go v0.5.0/go.mod h1:GG07T1G/8a/bg5yMwBP0pawQXnt7eCBXSOkAcBRL+F0=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
