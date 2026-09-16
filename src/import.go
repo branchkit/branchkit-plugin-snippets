@@ -29,7 +29,6 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"sync"
 
 	"github.com/branchkit/plugin-sdk-go"
 
@@ -42,11 +41,6 @@ import (
 var builtinCategories = map[string]bool{
 	"fun": true, "typography": true, "dynamic": true,
 }
-
-var (
-	importMu         sync.Mutex
-	lastImportResult string
-)
 
 type importedSnippet struct {
 	Spoken    string `json:"spoken"`
@@ -238,24 +232,24 @@ type okResponse struct {
 	OK bool `json:"ok"`
 }
 
-func setResult(msg string) {
-	importMu.Lock()
-	lastImportResult = msg
-	importMu.Unlock()
+func (h *Host) setResult(msg string) {
+	h.importMu.Lock()
+	h.lastImportResult = msg
+	h.importMu.Unlock()
 }
 
-func handleImportPack(req *importPackRequest) (any, error) {
+func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 	pack := strings.TrimSpace(req.Name)
 	if pack == "" {
-		setResult("A pack needs a name — it becomes the category every imported snippet carries.")
+		h.setResult("A pack needs a name — it becomes the category every imported snippet carries.")
 		return okResponse{OK: false}, nil
 	}
 	if builtinCategories[pack] {
-		setResult(fmt.Sprintf("%q is a built-in category — pick another pack name.", pack))
+		h.setResult(fmt.Sprintf("%q is a built-in category — pick another pack name.", pack))
 		return okResponse{OK: false}, nil
 	}
 	if strings.TrimSpace(req.Text) == "" {
-		setResult("Nothing to import — paste a pack first.")
+		h.setResult("Nothing to import — paste a pack first.")
 		return okResponse{OK: false}, nil
 	}
 
@@ -265,13 +259,13 @@ func handleImportPack(req *importPackRequest) (any, error) {
 		if len(outcome.skipped) > 0 {
 			reasons = " " + strings.Join(firstN(outcome.skipped, 3), "; ")
 		}
-		setResult(fmt.Sprintf("Detected %s, but nothing imported.%s", outcome.format, reasons))
+		h.setResult(fmt.Sprintf("Detected %s, but nothing imported.%s", outcome.format, reasons))
 		return okResponse{OK: false}, nil
 	}
 
 	// Replace-on-reimport: the pack's previous records go first, so a
 	// re-import IS the update path and removals in the source propagate.
-	existing, err := plugin.ListAll("snippets")
+	existing, err := h.plugin.ListAll("snippets")
 	if err != nil {
 		return nil, err
 	}
@@ -285,7 +279,7 @@ func handleImportPack(req *importPackRequest) (any, error) {
 		}
 	}
 	if len(stale) > 0 {
-		if _, _, err := plugin.DeleteMany("snippets", stale); err != nil {
+		if _, _, err := h.plugin.DeleteMany("snippets", stale); err != nil {
 			return nil, err
 		}
 	}
@@ -312,7 +306,7 @@ func handleImportPack(req *importPackRequest) (any, error) {
 		seen[snip.Spoken] = len(entries)
 		entries = append(entries, branchkit.CollectionPutEntry{ID: snip.Spoken, Payload: payload})
 	}
-	if _, err := plugin.PutMany("snippets", entries); err != nil {
+	if _, err := h.plugin.PutMany("snippets", entries); err != nil {
 		return nil, err
 	}
 
@@ -328,16 +322,16 @@ func handleImportPack(req *importPackRequest) (any, error) {
 		msg += fmt.Sprintf(" Skipped %d: %s", len(outcome.skipped),
 			strings.Join(firstN(outcome.skipped, 5), "; "))
 	}
-	setResult(msg)
+	h.setResult(msg)
 	return okResponse{OK: true}, nil
 }
 
-func handleRemovePack(req *removePackRequest) (any, error) {
+func (h *Host) handleRemovePack(req *removePackRequest) (any, error) {
 	pack := strings.TrimSpace(req.Name)
 	if pack == "" || builtinCategories[pack] {
 		return okResponse{OK: false}, nil
 	}
-	existing, err := plugin.ListAll("snippets")
+	existing, err := h.plugin.ListAll("snippets")
 	if err != nil {
 		return nil, err
 	}
@@ -351,11 +345,11 @@ func handleRemovePack(req *removePackRequest) (any, error) {
 		}
 	}
 	if len(ids) > 0 {
-		if _, _, err := plugin.DeleteMany("snippets", ids); err != nil {
+		if _, _, err := h.plugin.DeleteMany("snippets", ids); err != nil {
 			return nil, err
 		}
 	}
-	setResult(fmt.Sprintf("Removed pack %q (%d snippet(s)).", pack, len(ids)))
+	h.setResult(fmt.Sprintf("Removed pack %q (%d snippet(s)).", pack, len(ids)))
 	return okResponse{OK: true}, nil
 }
 
@@ -368,9 +362,9 @@ func firstN(xs []string, n int) []string {
 
 // --- render ----------------------------------------------------------------
 
-func renderImportSettings() (string, error) {
+func (h *Host) renderImportSettings() (string, error) {
 	counts := map[string]int{}
-	if records, err := plugin.ListAll("snippets"); err == nil {
+	if records, err := h.plugin.ListAll("snippets"); err == nil {
 		for _, rec := range records {
 			var p struct {
 				Category string `json:"category"`
@@ -386,9 +380,9 @@ func renderImportSettings() (string, error) {
 	}
 	sort.Slice(packs, func(i, j int) bool { return packs[i].Name < packs[j].Name })
 
-	importMu.Lock()
-	result := lastImportResult
-	importMu.Unlock()
+	h.importMu.Lock()
+	result := h.lastImportResult
+	h.importMu.Unlock()
 
 	return branchkit.RenderComponent(ImportSettings(packs, result))
 }

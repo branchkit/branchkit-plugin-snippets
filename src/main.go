@@ -22,23 +22,21 @@ const pasteThreshold = 200
 // the target app receives the OLD clipboard.
 const pasteSettle = 300 * time.Millisecond
 
-var plugin *branchkit.Plugin
-
 func main() {
-	plugin = branchkit.NewPlugin()
+	h := newHost(branchkit.NewPlugin())
 
 	// Two ways in, one source of truth. The voice capture arrives with
 	// `text` pre-resolved (the matcher read the collection's value_field);
 	// every other trigger — keybinds, HUD buttons, another plugin's
 	// dispatch — sends `name` and the CURRENT expansion is read from the
 	// collection here, so nothing ever carries a stale copy of a snippet.
-	HandleType(plugin, func(p TypeParams, _ *branchkit.OnActionRequest) (any, error) {
+	HandleType(h.plugin, func(p TypeParams, _ *branchkit.OnActionRequest) (any, error) {
 		text := ""
 		if p.Text != nil {
 			text = *p.Text
 		}
 		if p.Name != nil && *p.Name != "" {
-			resolved, err := lookupExpansion(*p.Name)
+			resolved, err := h.lookupExpansion(*p.Name)
 			if err != nil {
 				return nil, err
 			}
@@ -49,30 +47,30 @@ func main() {
 			return nil, nil
 		}
 		if needsPaste(text) {
-			return nil, pasteText(text)
+			return nil, h.pasteText(text)
 		}
-		return nil, plugin.InputTypeText(text)
+		return nil, h.plugin.InputTypeText(text)
 	})
 
 	// The Import settings tab (docs/design/DESIGN_SELECTION_PRIMITIVE.md, step
 	// 3c): paste a pack, name it, done. Its snippets arrive as selection
 	// targets, not vocabulary.
-	plugin.SettingsCSS(snippetsCSS)
-	plugin.SettingsTab("import", func(_ *branchkit.RenderSettingsRequest) (string, error) {
-		return renderImportSettings()
+	h.plugin.SettingsCSS(snippetsCSS)
+	h.plugin.SettingsTab("import", func(_ *branchkit.RenderSettingsRequest) (string, error) {
+		return h.renderImportSettings()
 	})
 
-	branchkit.HandleTyped(plugin, "import_pack", handleImportPack)
-	branchkit.HandleTyped(plugin, "remove_pack", handleRemovePack)
+	branchkit.HandleTyped(h.plugin, "import_pack", h.handleImportPack)
+	branchkit.HandleTyped(h.plugin, "remove_pack", h.handleRemovePack)
 
-	plugin.Run()
+	h.plugin.Run()
 }
 
 // lookupExpansion resolves a snippet by its spoken name — records are keyed
 // by it — reading the merged collection, so user edits in Settings and pack
 // contributions reach by-name triggers immediately.
-func lookupExpansion(name string) (string, error) {
-	rec, err := plugin.Get("snippets", name)
+func (h *Host) lookupExpansion(name string) (string, error) {
+	rec, err := h.plugin.Get("snippets", name)
 	if err != nil {
 		return "", err
 	}
@@ -107,26 +105,26 @@ func needsPaste(s string) bool {
 // paste still works and the clipboard keeps the expansion; the README
 // documents the trade. The signal_clipboard_in_use effect announces the
 // dance so clipboard-aware plugins can stand off.
-func pasteText(text string) error {
-	_, _ = plugin.AssertEffect("signal_clipboard_in_use")
-	defer func() { _, _, _ = plugin.RetractEffect("signal_clipboard_in_use") }()
+func (h *Host) pasteText(text string) error {
+	_, _ = h.plugin.AssertEffect("signal_clipboard_in_use")
+	defer func() { _, _, _ = h.plugin.RetractEffect("signal_clipboard_in_use") }()
 
 	saved := ""
 	restorable := false
-	if r, err := plugin.InputClipboardRead("text"); err == nil && r != nil && r.Text != nil {
+	if r, err := h.plugin.InputClipboardRead("text"); err == nil && r != nil && r.Text != nil {
 		saved, restorable = *r.Text, true
 	}
 
-	if err := plugin.InputClipboardAction("set", &text); err != nil {
+	if err := h.plugin.InputClipboardAction("set", &text); err != nil {
 		return err
 	}
-	if err := plugin.InputClipboardAction("paste", nil); err != nil {
+	if err := h.plugin.InputClipboardAction("paste", nil); err != nil {
 		return err
 	}
 
 	if restorable {
 		time.Sleep(pasteSettle)
-		return plugin.InputClipboardAction("set", &saved)
+		return h.plugin.InputClipboardAction("set", &saved)
 	}
 	return nil
 }
