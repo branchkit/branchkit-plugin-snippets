@@ -60,8 +60,8 @@ func main() {
 		return h.renderImportSettings()
 	})
 
-	branchkit.HandleTyped(h.plugin, "import_pack", h.handleImportPack)
-	branchkit.HandleTyped(h.plugin, "remove_pack", h.handleRemovePack)
+	branchkit.HandleCommand(h.plugin, "import_pack", h.handleImportPack)
+	branchkit.HandleCommand(h.plugin, "remove_pack", h.handleRemovePack)
 
 	h.plugin.Run()
 }

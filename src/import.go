@@ -234,19 +234,19 @@ func (h *Host) setResult(msg string) {
 	h.importMu.Unlock()
 }
 
-func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
+func (h *Host) handleImportPack(req *importPackRequest) error {
 	pack := strings.TrimSpace(req.Name)
 	if pack == "" {
 		h.setResult("A pack needs a name — it becomes the category every imported snippet carries.")
-		return nil, nil
+		return nil
 	}
 	if builtinCategories[pack] {
 		h.setResult(fmt.Sprintf("%q is a built-in category — pick another pack name.", pack))
-		return nil, nil
+		return nil
 	}
 	if strings.TrimSpace(req.Text) == "" {
 		h.setResult("Nothing to import — paste a pack first.")
-		return nil, nil
+		return nil
 	}
 
 	outcome := parsePack(req.Text)
@@ -256,14 +256,14 @@ func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 			reasons = " " + strings.Join(firstN(outcome.skipped, 3), "; ")
 		}
 		h.setResult(fmt.Sprintf("Detected %s, but nothing imported.%s", outcome.format, reasons))
-		return nil, nil
+		return nil
 	}
 
 	// Replace-on-reimport: the pack's previous records go first, so a
 	// re-import IS the update path and removals in the source propagate.
 	existing, err := h.plugin.ListAll("snippets")
 	if err != nil {
-		return nil, err
+		return err
 	}
 	var stale []string
 	for _, rec := range existing {
@@ -276,7 +276,7 @@ func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 	}
 	if len(stale) > 0 {
 		if _, _, err := h.plugin.DeleteMany("snippets", stale); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -303,7 +303,7 @@ func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 		entries = append(entries, branchkit.CollectionPutEntry{ID: snip.Spoken, Payload: payload})
 	}
 	if _, err := h.plugin.PutMany("snippets", entries); err != nil {
-		return nil, err
+		return err
 	}
 
 	msg := fmt.Sprintf("Imported %d snippet(s) into pack %q (%s", len(entries), pack, outcome.format)
@@ -319,17 +319,17 @@ func (h *Host) handleImportPack(req *importPackRequest) (any, error) {
 			strings.Join(firstN(outcome.skipped, 5), "; "))
 	}
 	h.setResult(msg)
-	return nil, nil
+	return nil
 }
 
-func (h *Host) handleRemovePack(req *removePackRequest) (any, error) {
+func (h *Host) handleRemovePack(req *removePackRequest) error {
 	pack := strings.TrimSpace(req.Name)
 	if pack == "" || builtinCategories[pack] {
-		return nil, nil
+		return nil
 	}
 	existing, err := h.plugin.ListAll("snippets")
 	if err != nil {
-		return nil, err
+		return err
 	}
 	var ids []string
 	for _, rec := range existing {
@@ -342,11 +342,11 @@ func (h *Host) handleRemovePack(req *removePackRequest) (any, error) {
 	}
 	if len(ids) > 0 {
 		if _, _, err := h.plugin.DeleteMany("snippets", ids); err != nil {
-			return nil, err
+			return err
 		}
 	}
 	h.setResult(fmt.Sprintf("Removed pack %q (%d snippet(s)).", pack, len(ids)))
-	return nil, nil
+	return nil
 }
 
 func firstN(xs []string, n int) []string {
