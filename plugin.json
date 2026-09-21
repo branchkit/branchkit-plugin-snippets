@@ -8,8 +8,10 @@
   "description": "Speak a snippet's name to type its expansion at the cursor. Add your own in Settings.",
   "author": "BranchKit",
   "publisher": "github:branchkit",
-  "privileges": ["input"],
-  "optional_privileges": ["clipboard"],
+  "requires": {
+    "privileges": ["input"],
+    "optional_privileges": ["clipboard"]
+  },
   "dev": {
     "build": [
       ["go", "build", "-ldflags=-s -w", "-o", "../snippets-plugin", "."]
