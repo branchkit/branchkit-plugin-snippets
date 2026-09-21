@@ -83,15 +83,7 @@
     "keybinds": {
       "alt+shift+s": { "action": "snippets.type", "params": { "name": "shrug" } }
     },
-    "snippets": [
-      { "spoken": "shrug", "expansion": "¯\\_(ツ)_/¯", "category": "fun", "speakable": true },
-      { "spoken": "table flip", "expansion": "(╯°□°)╯︵ ┻━┻", "category": "fun", "speakable": true },
-      { "spoken": "disapproval", "expansion": "ಠ_ಠ", "category": "fun", "speakable": true },
-      { "spoken": "long dash", "expansion": "—", "category": "typography", "speakable": true },
-      { "spoken": "check mark", "expansion": "✓", "category": "typography", "speakable": true },
-      { "spoken": "today", "expansion": "{{date}}", "category": "dynamic", "speakable": true },
-      { "spoken": "time now", "expansion": "{{time}}", "category": "dynamic", "speakable": true }
-    ]
+    "snippets": "snippets.json"
   },
   "consumes": {
     "effects": [
