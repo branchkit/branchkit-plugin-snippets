@@ -4,7 +4,7 @@
   "name": "Snippets",
   "icon": "text",
   "version": "0.1.0",
-  "min_api_version": "0.1.0",
+  "min_api_version": "0.2.0",
   "description": "Speak a snippet's name to type its expansion at the cursor. Add your own in Settings.",
   "author": "BranchKit",
   "publisher": "github:branchkit",
