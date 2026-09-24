@@ -1,6 +1,6 @@
 package main
 
-// Pack import (docs/design/DESIGN_SELECTION_PRIMITIVE.md, step 3c): paste a
+// Pack import: paste a
 // pack, name it, and its snippets arrive as SELECTION TARGETS — category =
 // pack identity, speakable = false. Import is a parse problem, not a
 // vocabulary problem: nothing here touches the grammar, because the

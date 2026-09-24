@@ -52,8 +52,7 @@ func main() {
 		return nil, h.plugin.InputTypeText(text)
 	})
 
-	// The Import settings tab (docs/design/DESIGN_SELECTION_PRIMITIVE.md, step
-	// 3c): paste a pack, name it, done. Its snippets arrive as selection
+	// The Import settings tab: paste a pack, name it, done. Its snippets arrive as selection
 	// targets, not vocabulary.
 	h.plugin.SettingsCSS(snippetsCSS)
 	h.plugin.SettingsTab("import", func(_ *branchkit.RenderSettingsRequest) (string, error) {
