@@ -49,7 +49,7 @@ func main() {
 		if needsPaste(text) {
 			return nil, h.pasteText(text)
 		}
-		return nil, h.plugin.InputTypeText(text)
+		return nil, h.plugin.InputTypeText(branchkit.InputTypeTextRequest{Text: text})
 	})
 
 	// The Import settings tab: paste a pack, name it, done. Its snippets arrive as selection
@@ -110,20 +110,20 @@ func (h *Host) pasteText(text string) error {
 
 	saved := ""
 	restorable := false
-	if r, err := h.plugin.InputClipboardRead("text"); err == nil && r != nil && r.Text != nil {
+	if r, err := h.plugin.InputClipboardRead(branchkit.InputClipboardReadRequest{ContentType: "text"}); err == nil && r != nil && r.Text != nil {
 		saved, restorable = *r.Text, true
 	}
 
-	if err := h.plugin.InputClipboardAction("set", &text); err != nil {
+	if err := h.plugin.InputClipboardAction(branchkit.InputClipboardActionRequest{Action: "set", Text: &text}); err != nil {
 		return err
 	}
-	if err := h.plugin.InputClipboardAction("paste", nil); err != nil {
+	if err := h.plugin.InputClipboardAction(branchkit.InputClipboardActionRequest{Action: "paste"}); err != nil {
 		return err
 	}
 
 	if restorable {
 		time.Sleep(pasteSettle)
-		return h.plugin.InputClipboardAction("set", &saved)
+		return h.plugin.InputClipboardAction(branchkit.InputClipboardActionRequest{Action: "set", Text: &saved})
 	}
 	return nil
 }
