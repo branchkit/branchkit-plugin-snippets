@@ -1,1 +1,3 @@
 snippets-plugin
+# `go build` in src/ with no -o names the binary after the module
+src/branchkit-plugin-snippets

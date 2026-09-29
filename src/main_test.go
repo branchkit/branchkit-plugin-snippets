@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
@@ -44,6 +45,39 @@ func TestMultiwordSpokenName(t *testing.T) {
 	}
 }
 
+// The keybind path: a trigger that carries only `name` gets the CURRENT
+// expansion, read from the collection when it fires. The harness stubs the
+// platform's input.type_text and logs the call.
+func TestByNameTypesTheLiveRecord(t *testing.T) {
+	h := harness.Start(t, "..")
+	var resp struct {
+		Status string `json:"status"`
+	}
+	h.CallPlugin("on_action", map[string]any{
+		"action": "snippets.type",
+		"params": map[string]any{"name": "table flip"},
+	}, &resp)
+	if resp.Status != "ok" {
+		t.Fatalf("on_action status %q", resp.Status)
+	}
+	for _, call := range h.GetRpcLog() {
+		if call.Method != "input.type_text" {
+			continue
+		}
+		var params struct {
+			Text string `json:"text"`
+		}
+		if err := json.Unmarshal(call.Params, &params); err != nil {
+			t.Fatal(err)
+		}
+		if params.Text != "(╯°□°)╯︵ ┻━┻" {
+			t.Fatalf("typed %q, want the record's expansion", params.Text)
+		}
+		return
+	}
+	t.Fatal("no input.type_text call — the by-name lookup found nothing")
+}
+
 func TestTokensExpand(t *testing.T) {
 	at := time.Date(2026, 9, 5, 14, 30, 0, 0, time.Local)
 	got := expandTokens("Notes — {{date}} at {{time}}", at)
@@ -68,13 +102,16 @@ func TestPasteRouting(t *testing.T) {
 	}
 }
 
+// "snippet" alone is a command too: with `discovery: "select"` the bare verb
+// opens the codeword browse. So an unknown name still matches the verb, and
+// what must not happen is a snippets.type action.
 func TestUnknownSnippetDoesNotMatch(t *testing.T) {
 	h := harness.Start(t, "..")
 	result, err := h.TrySimulateCommand("snippet nonsense")
 	if err != nil {
 		t.Fatalf("TrySimulateCommand: %v", err)
 	}
-	if result.Matched {
-		t.Fatal("a name absent from the collection must not match — the grammar is closed")
+	if result.ActionType() == "snippets.type" {
+		t.Fatal("a name absent from the collection must not type anything — the grammar is closed")
 	}
 }
