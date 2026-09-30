@@ -10,7 +10,12 @@
   "publisher": "github:branchkit",
   "requires": {
     "privileges": ["input"],
-    "optional_privileges": ["clipboard"]
+    "optional_privileges": ["clipboard"],
+    "capabilities": {
+      "uses": [
+        "input.clipboard_read"
+      ]
+    }
   },
   "dev": {
     "build": [
