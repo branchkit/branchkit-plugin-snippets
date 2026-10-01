@@ -88,7 +88,7 @@
   },
   "collection_data": {
     "voice_commands": "commands.json",
-    "keybinds": {
+    "_platform.bindings": {
       "alt+shift+s": { "action": "snippets.type", "params": { "name": "shrug" } }
     },
     "snippets": [
