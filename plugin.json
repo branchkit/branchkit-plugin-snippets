@@ -11,6 +11,10 @@
   "requires": {
     "privileges": ["input"],
     "optional_privileges": ["clipboard"],
+    "reasons": {
+      "privilege:input": "To type a snippet where the cursor is.",
+      "privilege:clipboard": "To put your clipboard back after pasting a long snippet. Without it the paste still works, and the clipboard keeps the snippet."
+    },
     "capabilities": {
       "uses": [
         "input.clipboard_read"
